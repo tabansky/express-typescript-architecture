@@ -1,0 +1,12 @@
+{
+    "watch": [
+        "src",
+        ".env",
+        "swagger.yaml"
+    ],
+    "ext": "js,ts,json",
+    "ignore": [
+        "src/logs/*"
+    ],
+    "exec": "ts-node -r tsconfig-paths/register --transpile-only src/index.ts"
+}

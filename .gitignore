@@ -1,0 +1,16 @@
+# Build
+build
+nginx.conf
+
+# Dependency directories
+node_modules/
+
+# Logs
+logs
+*.log
+
+# nyc test coverage
+.nyc_output
+
+# dotenv environment variable files
+.env

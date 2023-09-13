@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Dev typescript-express-starter",
+      "command": "npm run dev"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Test typescript-express-starter",
+      "command": "npm run test"
+    },
+  ]
+}
