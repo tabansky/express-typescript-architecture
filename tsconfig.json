@@ -19,17 +19,18 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"],
+      "@core/*": ["_core/*"],
       "@config": ["config"],
       "@types": ["types"],
       "@repositories": ["repositories"],
       "@constants": ["constants"],
-      "@controllers/*": ["controllers/*"],
+      "@controllers": ["controllers"],
       "@database": ["database"],
       "@exceptions/*": ["exceptions/*"],
       "@interfaces/*": ["interfaces/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
-      "@routes/*": ["routes/*"],
+      "@routes": ["routes"],
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"]
     }

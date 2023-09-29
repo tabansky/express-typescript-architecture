@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 
-import { Repository } from './abstract.repository';
+import { Repository } from '../_core/abstract/abstract.repository';
 import { logger } from '../utils/logger';
 
 export class ExampleRepository extends Repository {

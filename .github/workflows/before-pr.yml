@@ -1,0 +1,37 @@
+name: before-pr
+on: [pull_request]
+jobs:
+  check-bats-version:
+    name: Install npm packages
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+
+    - name: Install a project with a clean slate
+      run: npm ci
+
+    - name: Check eslint rules
+      run: npm run lint
+
+    # - name: docker-compose up
+    #   run: docker-compose up -d
+
+    # - name: Run tests
+    #   run: npm run test
+
+    # - name: Report
+    #   uses: dorny/test-reporter@v1
+    #   if: always()
+    #   with:
+    #     name: Test report
+    #     path: test-report.json
+    #     reporter: mocha-json
+
+    # - name: docker-compose down
+    #   run: docker-compose down
