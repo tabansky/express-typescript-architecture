@@ -13,7 +13,7 @@ if (!existsSync(logDir)) {
 const logFormat = winston.format.printf(({ timestamp, level, message }) => `${timestamp} ${level}: ${message}`);
 
 /*
- * Log Level
+ * Log Levels
  * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
 const logger = winston.createLogger({
@@ -24,7 +24,6 @@ const logger = winston.createLogger({
     logFormat,
   ),
   transports: [
-    // debug log setting
     new winstonDaily({
       level: 'debug',
       datePattern: 'YYYY-MM-DD',
@@ -34,7 +33,6 @@ const logger = winston.createLogger({
       json: false,
       zippedArchive: true,
     }),
-    // error log setting
     new winstonDaily({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
