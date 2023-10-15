@@ -1,2 +1,4 @@
-export * from './example.repository';
 export * from './setup';
+export * from './roles.repository';
+export * from './users.repository';
+export * from './session-tokens.repository';

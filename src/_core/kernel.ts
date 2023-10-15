@@ -8,14 +8,17 @@ import { setupRepositories } from '@repositories';
 import { routeComponents } from '@routes';
 import { logger } from '@utils/logger';
 import compression from 'compression';
-import cookieParser from 'cookie-parser'; // use for jwt?
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import session from 'express-session';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import knex from 'knex';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+
+import { sessionConfig } from '../config/session.config';
 
 export class Kernel {
   constructor(private app: Application) {
@@ -68,6 +71,7 @@ export class Kernel {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(session(sessionConfig));
     this.app.use(ErrorMiddleware);
     // this.app.use(NotFoundMiddleware);
 

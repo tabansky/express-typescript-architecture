@@ -4,6 +4,7 @@ config();
 
 export * from './database.config';
 export * from './swagger.config';
+export * from './mailer.config';
 
 export const CREDENTIALS = process.env.CREDENTIALS === 'true';
 export const PORT = Number(process.env.PORT);
