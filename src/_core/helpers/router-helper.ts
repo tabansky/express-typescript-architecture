@@ -1,5 +1,4 @@
 import { RouterComponent } from '@types';
-import { stat, Stats } from 'fs';
 
 import { RouteGroup } from '../router/components/group';
 import { RouteResource } from '../router/components/resource';
@@ -7,13 +6,12 @@ import { Route } from '../router/components/route';
 
 export function dropSlash(input: string): string {
   if (input === '/') {
-    return '/';
+    return input;
   }
 
   return `/${input.replace(/^\//, '').replace(/\/$/, '')}`;
 }
 
-// todo rewrite
 export function toRoutesJSON(routes: RouterComponent[]): Route[] {
   return routes.reduce((list: Route[], route) => {
     if (route instanceof RouteGroup) {
@@ -30,16 +28,4 @@ export function toRoutesJSON(routes: RouterComponent[]): Route[] {
 
     return list;
   }, []);
-}
-
-export function statFn(filePath: string): Promise<Stats> {
-  return new Promise((resolve, reject) => {
-    stat(filePath, (error, stats) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve(stats);
-    });
-  });
 }

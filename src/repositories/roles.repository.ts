@@ -3,9 +3,9 @@ import { Knex } from 'knex';
 import { Repository } from '../_core/abstract/abstract.repository';
 import { logger } from '../utils/logger';
 
-export class ExampleRepository extends Repository {
+export class Roles extends Repository {
   constructor(knex: Knex) {
-    super(knex, 'example_table');
+    super(knex, 'roles');
   }
 
   public async get() {
