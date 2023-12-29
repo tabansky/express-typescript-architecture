@@ -1,69 +1,50 @@
-import { CREDENTIALS, HOST, PORT, databaseConfig, swaggerConfig } from '@config';
-import { setupControllers } from '@controllers';
-import { Application } from '@core/declarations';
-import { ErrorMiddleware, NotFoundMiddleware } from '@core/middlewares';
-import { Router } from '@core/router';
-import { setupMiddlewares } from '@middlewares/setup';
-import { setupRepositories } from '@repositories';
-import { routeComponents } from '@routes';
-import { logger } from '@utils/logger';
+import { CREDENTIALS, HOST, PORT } from '@config';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import session from 'express-session';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import knex from 'knex';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import { logger } from 'utils/logger';
 
-import { sessionConfig } from '../config/session.config';
+import { Provider } from './abstract/abstract.provider';
+import { Application } from './declarations';
+import { GlobalErrorHandler } from './handlers/error.handler';
 
 export class Kernel {
-  constructor(private app: Application) {
-    this.boot();
+  private app: Application;
+
+  constructor() {
+    this.app = express();
+    this.preload();
   }
 
-  public static integrateTo(app: Application): void {
-    new Kernel(app);
-  }
+  public provide(providers: typeof Provider[]): this {
+    this.showExecutingTime(providers);
 
-  private boot() {
-    this.showExecutingTime(
-      this.initializeConstants,
-      this.initializeDatabase,
-      this.initializeMiddlewares,
-      this.initializeRepositories,
-      this.initializeControllers,
-      this.initializeRoutes,
-      this.initializeSwagger,
-    );
-  }
+    return this;
+  };
 
-  private showExecutingTime(...funcs: Function[]): void {
-    for (const func of funcs) {
-      logger.info('initialize ' + func.name.replace('initialize', ''));
-      console.time(func.name);
+  private showExecutingTime(providers: typeof Provider[]): void {
+    logger.info('Boot providers...');
 
-      func.apply(this);
+    for (const provider of providers) {
+      console.time(provider.name);
 
-      console.timeEnd(func.name);
+      provider.provide(this.app);
+
+      console.timeEnd(provider.name);
     }
 
-    logger.info('---------- initializing completed ----------');
+    logger.info('Providers booted successfully!');
   }
 
-  private initializeConstants(): void {
+  private preload(): void {
+    // constants
     this.app.set('port', PORT);
     this.app.set('host', HOST);
-  }
 
-  private initializeDatabase(): void {
-    this.app.set('knexClient', knex(databaseConfig));
-  }
-
-  private initializeMiddlewares(): void {
+    // core middlewares
     this.app.use(cors({ origin: process.env.ORIGIN, credentials: CREDENTIALS }));
     this.app.use(hpp());
     this.app.use(helmet());
@@ -71,26 +52,13 @@ export class Kernel {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
-    this.app.use(session(sessionConfig));
-    this.app.use(ErrorMiddleware);
-    // this.app.use(NotFoundMiddleware);
-
-    setupMiddlewares(this.app);
   }
 
-  private initializeRepositories(): void {
-    setupRepositories(this.app);
-  }
+  public boot(): Application {
+    // keep it after all providers
+    this.app.use(GlobalErrorHandler);
 
-  private initializeControllers(): void {
-    setupControllers(this.app);
-  }
-
-  private initializeRoutes(): void {
-    new Router(this.app, routeComponents, 'api').commit();
-  }
-
-  private initializeSwagger(): void {
-    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerConfig)));
+    return this.app;
   }
 }
+

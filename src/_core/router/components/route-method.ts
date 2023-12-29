@@ -1,10 +1,14 @@
-import { dropSlash } from '../../helpers/router-helper';
-import { MiddlewareHandler, RouteDefinition, RouteHandler } from '../../types';
+import { HttpValidator, MiddlewareNames, RouteDefinition, RouteHandler } from '@core/types';
+import { AnySchema } from 'joi';
 
-export class Route {
+import { dropSlash } from '../helper';
+
+export class RouteMethod {
   private prefixes: string[] = [];
 
-  private routeMiddleware: MiddlewareHandler[][] = [];
+  private routeMiddleware: MiddlewareNames[] = [];
+
+  private validations: HttpValidator = {};
 
   constructor(private pattern: string, private methods: string[], private handler: RouteHandler) {}
 
@@ -13,17 +17,22 @@ export class Route {
     return this;
   }
 
+  public validator(type: keyof HttpValidator, validator: AnySchema): this {
+    this.validator[type] = validator;
+    return this;
+  }
+
   public getHandler(): RouteHandler {
     return this.handler;
   }
 
-  public middleware(middleware: MiddlewareHandler | MiddlewareHandler[], prepend = false): this {
+  public middleware(middleware: MiddlewareNames | MiddlewareNames[], prepend = false): this {
     middleware = Array.isArray(middleware) ? middleware : [middleware];
 
     if (prepend) {
-      this.routeMiddleware.unshift(middleware);
+      this.routeMiddleware.unshift(...middleware);
     } else {
-      this.routeMiddleware.push(middleware);
+      this.routeMiddleware.push(...middleware);
     }
 
     return this;
@@ -34,7 +43,8 @@ export class Route {
       pattern: this.computePattern(),
       handler: this.handler,
       methods: this.methods,
-      middleware: this.routeMiddleware.flat(),
+      middleware: this.routeMiddleware,
+      validator: this.validations,
     };
   }
 

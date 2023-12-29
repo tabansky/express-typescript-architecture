@@ -1,6 +1,5 @@
+import { Repository } from '@core/abstract/abstract.repository';
 import { Knex } from 'knex';
-
-import { Repository } from '../_core/abstract/abstract.repository';
 
 export class Users extends Repository {
   constructor(knex: Knex) {
@@ -9,5 +8,9 @@ export class Users extends Repository {
 
   public async getByEmail(email: string): Promise<any> {
     return this.knex.select('*').where({ email: email }).first();
+  }
+
+  public async create(email: string, password): Promise<any> {
+    return this.knex.insert('*');
   }
 }

@@ -3,7 +3,7 @@ import { SessionOptions } from 'express-session';
 import { getHoursInMs } from '../helpers/time.helper';
 
 export const sessionConfig: SessionOptions = {
-  secret: process.env.SECRET_KEY,
+  secret: process.env.APP_KEY,
   resave: false,
   saveUninitialized: false,
   cookie: {

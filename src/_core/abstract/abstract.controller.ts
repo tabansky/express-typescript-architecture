@@ -1,5 +1,9 @@
-import { Application } from '@core/declarations';
+import { Application, ProvidedTypes } from '@core/declarations';
 
 export abstract class Controller {
-  constructor(protected readonly app: Application) {}
+  protected services: ProvidedTypes['services'];
+
+  constructor(protected readonly app: Application) {
+    this.services = app.get('services');
+  }
 }

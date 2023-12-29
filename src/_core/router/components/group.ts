@@ -1,13 +1,10 @@
-import { RouteResource } from './resource';
-import { Route } from './route';
-import { MiddlewareHandler } from '../../types';
+import { RouteResource } from '@core/router';
+import { MiddlewareNames, RouterComponents } from '@core/types';
 
 export class RouteGroup {
-  private groupMiddleware: MiddlewareHandler[] = [];
+  constructor(public routes: RouterComponents[]) {}
 
-  constructor(public routes: (Route | RouteResource | RouteGroup)[]) {}
-
-  private invoke(route: Route | RouteResource | RouteGroup, method: string, params: any[]) {
+  private invoke(route: RouterComponents, method: string, params: unknown[]): void {
     if (route instanceof RouteResource) {
       route.routes.forEach((child) => this.invoke(child, method, params));
       return;
@@ -26,16 +23,10 @@ export class RouteGroup {
     return this;
   }
 
-  public middleware(middleware: MiddlewareHandler | MiddlewareHandler[], prepend: boolean = false): this {
+  public middleware(middleware: MiddlewareNames | MiddlewareNames[], prepend: boolean = true): this {
     middleware = Array.isArray(middleware) ? middleware : [middleware];
 
-    if (prepend) {
-      middleware.forEach((mw) => this.groupMiddleware.unshift(mw));
-    } else {
-      middleware.forEach((mw) => this.groupMiddleware.push(mw));
-    }
-
-    this.routes.forEach((route) => this.invoke(route, 'middleware', [this.groupMiddleware, true]));
+    this.routes.forEach((route) => this.invoke(route, 'middleware', [middleware, prepend]));
 
     return this;
   }

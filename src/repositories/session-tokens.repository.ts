@@ -1,7 +1,6 @@
-import { SessionToken } from '@models/session-token.model';
+import { Repository } from '@core/abstract/abstract.repository';
 import { Knex } from 'knex';
-
-import { Repository } from '../_core/abstract/abstract.repository';
+import { SessionToken } from 'models/session-token.model';
 
 export class SessionTokens extends Repository {
   constructor(knex: Knex) {
@@ -10,5 +9,9 @@ export class SessionTokens extends Repository {
 
   public async create(data: SessionToken) {
     return this.knex.insert(data.toSnakeCase(data));
+  }
+
+  public async delete(token: string) {
+    return this.knex.where({ token }).delete();
   }
 }

@@ -1,8 +1,5 @@
-import { RouterComponent } from '@types';
-
-import { RouteGroup } from '../router/components/group';
-import { RouteResource } from '../router/components/resource';
-import { Route } from '../router/components/route';
+import { RouteGroup, RouteMethod, RouteResource } from '@core/router';
+import { RouterComponents } from '@core/types';
 
 export function dropSlash(input: string): string {
   if (input === '/') {
@@ -12,8 +9,8 @@ export function dropSlash(input: string): string {
   return `/${input.replace(/^\//, '').replace(/\/$/, '')}`;
 }
 
-export function toRoutesJSON(routes: RouterComponent[]): Route[] {
-  return routes.reduce((list: Route[], route) => {
+export function toRoutesJSON(routes: RouterComponents[]): RouteMethod[] {
+  return routes.reduce((list: RouteMethod[], route) => {
     if (route instanceof RouteGroup) {
       list = list.concat(toRoutesJSON(route.routes));
       return list;

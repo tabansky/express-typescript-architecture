@@ -1,5 +1,6 @@
-import { camelToSnake, snakeToCamel } from '../helpers/string.helper';
+import { camelToSnake, snakeToCamel } from './helpers/string.helper';
 
+// todo refactor abstract model
 export abstract class Model {
   public toCamelCase(data: Record<string, unknown>): Model {
     const result = {} as Model;

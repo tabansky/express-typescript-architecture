@@ -1,20 +1,46 @@
-import { Route } from './route';
-import { MiddlewareHandler, ResourceRouteNames } from '../../types';
+import { ProvidedTypes } from '@core/declarations';
+import { RouteMethod } from '@core/router';
+import { MiddlewareNames, ResourceRouteNames, RouteHandler } from '@core/types';
 
-type ResourceMiddleware = { [R in ResourceRouteNames]?: MiddlewareHandler | MiddlewareHandler[] }
-& { '*'?: MiddlewareHandler | MiddlewareHandler[] };
+type ResourceMiddleware = { [R in ResourceRouteNames]?: MiddlewareNames | MiddlewareNames[] }
+& { '*'?: MiddlewareNames | MiddlewareNames[] };
 
 export class RouteResource {
-  private resourceParamNames: Record<string, string> = {};
+  public routes: RouteMethod[] = [];
 
-  public routes: Route[] = [];
-
-  constructor(private resource: string, private controller: string) {
+  constructor(private resource: string, private controller: keyof ProvidedTypes['controllers']) {
     this.buildRoutes();
   }
 
+  public only(names: ResourceRouteNames[]): this {
+    this.routes = this.filter(names, true);
+    return this;
+  }
+
+  public except(names: ResourceRouteNames[]): this {
+    this.routes = this.filter(names, false);
+    return this;
+  }
+
+  public middleware(middleware: ResourceMiddleware, prepend = true): this {
+    for (const name in middleware) {
+      if (name === '*') {
+        this.routes.forEach((route) => route.middleware(middleware[name as MiddlewareNames], prepend));
+        continue;
+      }
+
+      const findRoute = this.routes.find((route) => route.getHandler().endsWith(name));
+
+      if (findRoute) {
+        findRoute.middleware(middleware[name], prepend);
+      }
+    }
+
+    return this;
+  }
+
   private makeRoute(pattern: string, methods: string[], action: ResourceRouteNames) {
-    const route = new Route(pattern, methods, `${this.controller}.${action}`);
+    const route = new RouteMethod(pattern, methods, `${this.controller}.${action as keyof RouteHandler[keyof RouteHandler]}`);
 
     this.routes.push(route);
   }
@@ -34,32 +60,5 @@ export class RouteResource {
       const match = names.find((name) => route.getHandler().endsWith(name));
       return inverse ? !match : match;
     });
-  }
-
-  public only(names: ResourceRouteNames[]): this {
-    this.routes = this.filter(names, true);
-    return this;
-  }
-
-  public except(names: ResourceRouteNames[]): this {
-    this.routes = this.filter(names, false);
-    return this;
-  }
-
-  public middleware(middleware: ResourceMiddleware): this {
-    for (const name in middleware) {
-      if (name === '*') {
-        this.routes.forEach((route) => route.middleware(middleware[name]));
-        continue;
-      }
-
-      const findRoute = this.routes.find((route) => route.getHandler().endsWith(name));
-
-      if (findRoute) {
-        findRoute.middleware(middleware[name]);
-      }
-    }
-
-    return this;
   }
 }

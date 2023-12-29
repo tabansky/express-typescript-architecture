@@ -1,7 +1,6 @@
-import { RouterComponent } from '@types';
+import { RouterComponents } from '@core/types';
+import * as Auth from 'routes/api/auth.route';
 
-import * as Example from './api/example.route';
-
-export const routeComponents: RouterComponent[] = [
-  Example.default,
+export const apiRoutes: RouterComponents[] = [
+  Auth.default,
 ];

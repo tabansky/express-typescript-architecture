@@ -6,6 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
+    "removeComments": true,
     "module": "commonjs",
     "pretty": true,
     "sourceMap": true,
@@ -15,24 +16,12 @@
     "noEmit": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    // "importHelpers": true,
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"],
       "@core/*": ["_core/*"],
       "@config": ["config"],
       "@types": ["types"],
-      "@repositories": ["repositories"],
-      "@constants": ["constants"],
-      "@controllers": ["controllers"],
-      "@database": ["database"],
-      "@exceptions/*": ["exceptions/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@middlewares/*": ["middlewares/*"],
-      "@models/*": ["models/*"],
-      "@routes": ["routes"],
-      "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@constants": ["constants"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],
