@@ -18,7 +18,7 @@ export class RouteMethod {
   }
 
   public validator(type: keyof HttpValidator, validator: AnySchema): this {
-    this.validator[type] = validator;
+    this.validations[type] = validator;
     return this;
   }
 

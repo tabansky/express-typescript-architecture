@@ -21,9 +21,9 @@ export class AuthController extends Controller {
    * @description
    */
   public async register(req: Request, res: Response): Promise<void> {
-    const token = await this.services.Auth.register(req.body);
+    // const token = await this.services.Auth.register(req.body);
 
-    res.cookie('token', token, { maxAge: getHoursInMs(2) });
+    // res.cookie('token', token, { maxAge: getHoursInMs(2) });
     res.sendStatus(HttpStatusCodes.CREATED);
   }
 

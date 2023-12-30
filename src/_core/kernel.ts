@@ -20,14 +20,14 @@ export class Kernel {
   }
 
   public provide(providers: typeof Provider[]): this {
+    logger.info('Boot providers...');
     this.showExecutingTime(providers);
+    logger.info('Providers booted successfully!');
 
     return this;
   };
 
   private showExecutingTime(providers: typeof Provider[]): void {
-    logger.info('Boot providers...');
-
     for (const provider of providers) {
       console.time(provider.name);
 
@@ -35,8 +35,6 @@ export class Kernel {
 
       console.timeEnd(provider.name);
     }
-
-    logger.info('Providers booted successfully!');
   }
 
   private preload(): void {

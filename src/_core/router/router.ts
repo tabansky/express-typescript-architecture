@@ -1,3 +1,4 @@
+import { Controller } from '@core/abstract/abstract.controller';
 import { HttpException } from '@core/handlers/http-exception';
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'joi';
@@ -86,8 +87,14 @@ export class Router {
 
     const [className, method] = route.handler.split('.');
 
-    const handler = controllers[className]?.[method];
+    const controller = controllers[className];
+    const handler = controller[method]?.bind(controller);
     const middleware = route.middleware.map(ml => middlewares[ml]);
+
+    if (!(controller instanceof Controller)) {
+      logger.error(`controller ${className} is not instanceof Controller`);
+      throw new Error('controller must be a instanceof Controller');
+    }
 
     if (typeof handler !== 'function') {
       logger.error(`handler ${className}.${method} must be a function`);
