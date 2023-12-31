@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && node build/index.js",
     "dev": "nodemon",
-    "test": "jest --force-exit",
+    "test": "jest",
     "build": "rm -rf build && tsc && tsc-alias",
     "lint": "eslint . --ext=.ts",
     "lint:fix": "eslint . --ext=.ts --fix",

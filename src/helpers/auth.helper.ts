@@ -8,8 +8,8 @@ export const generateBearerToken = (): string => {
 
 export const getTokenValidityHours = (remember: boolean): number => {
   if (remember) {
-    return getHoursInMs(24);
+    return getHoursInMs(72);
   }
 
-  return getHoursInMs(72);
+  return getHoursInMs(24);
 };

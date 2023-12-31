@@ -1,15 +1,15 @@
 import { Model } from '@core/abstract/abstract.model';
 
 export class SessionToken extends Model {
-  public id: number;
+  public id!: number;
 
-  public token: string;
+  public token!: string;
 
-  public entity: string;
+  public entity!: string;
 
-  public entityId: string;
+  public entityId!: string;
 
-  public createdAt: string;
+  public createdAt!: string;
 
-  public updatedAt: string;
+  public updatedAt!: string;
 }

@@ -16,6 +16,8 @@
     "noEmit": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "baseUrl": "src",
     "paths": {
       "@core/*": ["_core/*"],
@@ -24,6 +26,6 @@
       "@constants": ["constants"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env"],
-  "exclude": ["node_modules", "src/logs"]
+  "include": ["src/**/*.ts", "src/**/*.json", ".env", "./tests"],
+  "exclude": ["node_modules", "src/logs", "tests"]
 }

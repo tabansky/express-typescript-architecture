@@ -1,4 +1,4 @@
-import { logger } from 'utils/logger';
+import { logger } from 'tools/logger';
 
 import app from './app';
 

@@ -3,4 +3,4 @@
  * Do not modify this file manually
  */
 
-export * from './login.schemas';
+export * from './auth.schemas';

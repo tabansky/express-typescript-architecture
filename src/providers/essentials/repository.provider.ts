@@ -1,7 +1,7 @@
 import { Provider } from '@core/abstract/abstract.provider';
 import { Application } from '@core/declarations';
 import { Repositories } from '@types';
-import { Roles, Users, SessionTokens } from 'repositories';
+import { Roles, Users, SessionTokens, ConfirmationTokens, Permissions } from 'repositories';
 
 const key = 'repositories';
 
@@ -19,6 +19,8 @@ export class RepositoryProvider implements Provider {
       Roles: new Roles(knexClient),
       Users: new Users(knexClient),
       SessionTokens: new SessionTokens(knexClient),
+      ConfirmationTokens: new ConfirmationTokens(knexClient),
+      Permissions: new Permissions(knexClient),
     };
 
     app.set(key, repositories);

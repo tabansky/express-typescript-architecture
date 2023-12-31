@@ -2,8 +2,10 @@ import { Repository } from '@core/abstract/abstract.repository';
 import { Knex } from 'knex';
 
 export class Users extends Repository {
+  protected tableName = 'users';
+
   constructor(knex: Knex) {
-    super(knex, 'users');
+    super(knex);
   }
 
   public async getByEmail(email: string): Promise<any> {

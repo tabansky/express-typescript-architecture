@@ -1,8 +1,9 @@
 import { Controller } from '@core/abstract/abstract.controller';
 import { HttpException } from '@core/handlers/http-exception';
+import { Controllers } from '@types';
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError } from 'joi';
-import { logger } from 'utils/logger';
+import { logger } from 'tools/logger';
 
 import { toRoutesJSON } from './helper';
 import { HttpStatusCodes } from '../constants';
@@ -32,14 +33,14 @@ export class Router {
       handlers.push(handler);
       routeDefinitions.push(route.toJSON());
 
-      this.register(routeDefinitions.at(-1));
+      this.register(routeDefinitions.at(-1)!);
     });
 
     return routeDefinitions;
   }
 
   private validateAndPipeRequest(validator: HttpValidator = {}) {
-    function catchError(error: ValidationError) {
+    function catchError(error?: ValidationError) {
       if (!error) {
         return;
       }
@@ -85,27 +86,17 @@ export class Router {
     const controllers = this.app.get('controllers');
     const middlewares = this.app.get('middlewares');
 
-    const [className, method] = route.handler.split('.');
+    const [className, method] = route.handler.split('.') as [keyof Controllers, keyof Controllers[keyof Controllers]];
 
     const controller = controllers[className];
-    const handler = controller[method]?.bind(controller);
+    const handler = controller[method];
     const middleware = route.middleware.map(ml => middlewares[ml]);
-
-    if (!(controller instanceof Controller)) {
-      logger.error(`controller ${className} is not instanceof Controller`);
-      throw new Error('controller must be a instanceof Controller');
-    }
 
     if (typeof handler !== 'function') {
       logger.error(`handler ${className}.${method} must be a function`);
       throw new Error('handler must be a function');
     }
 
-    if (middleware.includes(undefined)) {
-      logger.error('middleware function is not registered');
-      throw new Error('middleware is not registered function');
-    }
-
-    this.app.use(route.pattern, this.validateAndPipeRequest(route.validator), middleware, handler);
+    this.app.use(route.pattern, this.validateAndPipeRequest(route.validator), middleware, handler.bind(controller));
   }
 }

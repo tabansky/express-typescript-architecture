@@ -5,7 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import { logger } from 'utils/logger';
+import { logger } from 'tools/logger';
 
 import { Provider } from './abstract/abstract.provider';
 import { Application } from './declarations';
@@ -29,11 +29,14 @@ export class Kernel {
 
   private showExecutingTime(providers: typeof Provider[]): void {
     for (const provider of providers) {
-      console.time(provider.name);
+      const start = Date.now();
 
       provider.provide(this.app);
 
-      console.timeEnd(provider.name);
+      const end = Date.now();
+      const ms = end - start;
+
+      logger.info(`Provider ${provider.name} booted in ${ms}ms`);
     }
   }
 

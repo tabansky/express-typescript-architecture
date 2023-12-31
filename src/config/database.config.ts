@@ -1,4 +1,6 @@
-export const databaseConfig = {
+import { Knex } from 'knex';
+
+export const databaseConfig: Knex.Config = {
   client: 'mysql',
   connection: {
     charset: 'utf8',

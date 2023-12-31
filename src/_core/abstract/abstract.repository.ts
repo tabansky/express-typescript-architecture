@@ -2,11 +2,10 @@ import { Knex } from 'knex';
 
 export abstract class Repository {
   protected knex: Knex;
-  protected tableName: string;
+  protected abstract tableName: string;
 
-  constructor(knex: Knex, tableName: string) {
+  constructor(knex: Knex) {
     this.knex = knex;
-    this.tableName = tableName;
   }
 
   protected getNewQueryBuilder(): Knex.QueryBuilder {
