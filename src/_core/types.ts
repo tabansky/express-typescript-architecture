@@ -1,5 +1,5 @@
 import { RouteGroup, RouteMethod, RouteResource } from '@core/router';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request as ExpressRequest, Response } from 'express';
 import Joi from 'joi';
 
 import { ProvidedTypes } from './declarations';
@@ -13,7 +13,7 @@ export type RouterComponents = RouteMethod | RouteGroup | RouteResource;
 
 export type ResourceRouteNames = 'index' | 'edit' | 'store' | 'update' | 'destroy';
 
-export type MiddlewareHandler = (req: Request, res: Response, next: NextFunction) => void;
+export type MiddlewareHandler = (req: ExpressRequest, res: Response, next: NextFunction) => void;
 
 export type RouteDefinition = {
   pattern: string,
@@ -23,3 +23,5 @@ export type RouteDefinition = {
   validator?: HttpValidator,
 };
 
+type ReqGeneric = Partial<Record<'params' | 'query' | 'body', unknown>>;
+export type Request<T extends ReqGeneric = ReqGeneric> = ExpressRequest<T['params'], never, T['body'], T['query']>;

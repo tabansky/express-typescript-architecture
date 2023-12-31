@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     schema.string('token', 340).notNullable();
     schema.string('entity').notNullable();
     schema.string('entity_id').notNullable();
+    schema.dateTime('expires_at').notNullable();
 
     schema.timestamps();
   });

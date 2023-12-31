@@ -7,10 +7,6 @@ export class SessionTokens extends Repository {
     super(knex, 'session_tokens');
   }
 
-  public async create(data: SessionToken) {
-    return this.knex.insert(data.toSnakeCase(data));
-  }
-
   public async delete(token: string) {
     return this.knex.where({ token }).delete();
   }
