@@ -1,6 +1,6 @@
 import { Model } from '@core/abstract/abstract.model';
 
-export class SessionToken extends Model {
+export class SessionToken extends Model<SessionToken> {
   public id: number;
 
   public token: string;

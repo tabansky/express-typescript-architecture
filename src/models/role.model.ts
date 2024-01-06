@@ -1,7 +1,7 @@
 import { RoleTypes } from '@constants';
 import { Model } from '@core/abstract/abstract.model';
 
-export class Role extends Model {
+export class Role extends Model<typeof Role> {
   public id: number;
 
   public name: string;

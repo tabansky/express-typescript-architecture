@@ -9,8 +9,8 @@ node_modules/
 logs
 *.log
 
-# nyc test coverage
-.nyc_output
+# test coverage
+coverage
 
-# dotenv environment variable files
+# environment variables
 .env

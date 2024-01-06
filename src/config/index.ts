@@ -1,10 +1,9 @@
-import { config } from 'dotenv';
-
-config();
+import 'dotenv/config'; // loads environment variables
 
 export * from './database.config';
 export * from './swagger.config';
 export * from './mailer.config';
+export * from './session.config';
 
 export const CREDENTIALS = process.env.CREDENTIALS === 'true';
 export const PORT = Number(process.env.PORT);

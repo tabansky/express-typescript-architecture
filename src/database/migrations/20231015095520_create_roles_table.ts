@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     schema.increments('id');
 
     schema.string('name', 127).unique().notNullable();
-    schema.enum('type', ['root', 'system', 'default']).notNullable().defaultTo('default');
+    schema.enum('type', ['root', 'default']).notNullable().defaultTo('default');
     schema.boolean('is_visible').notNullable().defaultTo(true);
 
     schema.timestamps();

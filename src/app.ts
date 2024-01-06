@@ -1,8 +1,6 @@
 import { Kernel } from '@core/kernel';
-import express from 'express';
+import { providers } from 'providers';
 
-const app = express();
-
-Kernel.integrateTo(app);
+const app = new Kernel().provide(providers).boot();
 
 export default app;
