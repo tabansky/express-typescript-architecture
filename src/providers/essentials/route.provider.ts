@@ -2,7 +2,7 @@ import { Provider } from '@core/abstract/abstract.provider';
 import { Application } from '@core/declarations';
 import { Router } from '@core/router';
 import { RouteDefinition } from '@core/types';
-import { apiRoutes } from 'routes';
+import { apiRoutes } from 'src/routes';
 
 const key = 'routes';
 

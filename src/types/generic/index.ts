@@ -1,7 +1,7 @@
 import { MiddlewareHandler } from '@core/types';
-import { AuthController } from 'controllers/auth.controller';
-import { ConfirmationTokens, Permissions, Roles, SessionTokens, Users } from 'repositories';
-import { AuthService } from 'services';
+import { AuthController } from 'src/controllers/auth.controller';
+import { ConfirmationTokens, Permissions, Roles, SessionTokens, Users } from 'src/repositories';
+import { AuthService } from 'src/services';
 
 export interface Repositories {
   Roles: Roles;

@@ -3,12 +3,12 @@
  * Do not modify this file manually
  */
 
-export interface AuthForgotBodyParams {
-  type: 'password';
-  value: string;
+export interface AuthForgotPasswordBodyParams {
+  email: string;
 }
 
 export interface ConfirmationQueryParams {
+  action: 'confirm_email' | 'reset_password';
   email: string;
   token: string;
 }

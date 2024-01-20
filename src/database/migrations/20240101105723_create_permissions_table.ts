@@ -3,7 +3,7 @@ import type { Knex } from 'knex';
 const table = 'permissions';
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTableIfNotExists(table, (schema) => {
+  await knex.schema.createTable(table, (schema) => {
     schema.boolean('can_access').defaultTo(true);
     schema.string('pattern').notNullable();
     schema.string('handler').notNullable();
@@ -13,7 +13,8 @@ export async function up(knex: Knex): Promise<void> {
     schema.primary(['pattern', 'role_id', 'handler']);
     schema.foreign('role_id').references('id').inTable('roles').onDelete('cascade');
 
-    schema.timestamps();
+    schema.timestamp('created_at').defaultTo(knex.fn.now());
+    schema.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
   });
 }
 

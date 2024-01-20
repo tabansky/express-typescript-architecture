@@ -1,7 +1,7 @@
 import { Provider } from '@core/abstract/abstract.provider';
 import { Application } from '@core/declarations';
 import { Services } from '@types';
-import { AuthService } from 'services/auth.service';
+import { AuthService } from 'src/services';
 
 const key = 'services';
 

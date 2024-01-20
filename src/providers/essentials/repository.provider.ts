@@ -1,7 +1,7 @@
 import { Provider } from '@core/abstract/abstract.provider';
 import { Application } from '@core/declarations';
 import { Repositories } from '@types';
-import { Roles, Users, SessionTokens, ConfirmationTokens, Permissions } from 'repositories';
+import { ConfirmationTokens, Permissions, Roles, SessionTokens, Users } from 'src/repositories';
 
 const key = 'repositories';
 

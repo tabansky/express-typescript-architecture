@@ -18,14 +18,15 @@
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@core/*": ["_core/*"],
-      "@config": ["config"],
-      "@types": ["types"],
-      "@constants": ["constants"]
+      "@core/*": ["src/_core/*"],
+      "@config": ["src/config"],
+      "@types": ["src/types"],
+      "@constants": ["src/constants"],
+      "src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env", "./tests"],
-  "exclude": ["node_modules", "src/logs", "tests"]
+  "include": ["src/*"],
+  "exclude": ["node_modules", "src/logs"]
 }

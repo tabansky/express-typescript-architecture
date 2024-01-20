@@ -8,6 +8,10 @@ export abstract class Repository {
     this.knex = knex;
   }
 
+  public transaction(): Promise<Knex.Transaction> {
+    return this.knex.transaction();
+  }
+
   protected getNewQueryBuilder(): Knex.QueryBuilder {
     return this.knex.from(this.tableName);
   }

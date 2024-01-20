@@ -7,7 +7,7 @@ const config: JestConfigWithTsJest = {
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   modulePaths: [
-    '<rootDir>/src',
+    '<rootDir>',
   ],
 };
 

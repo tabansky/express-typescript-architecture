@@ -22,7 +22,7 @@ describe('Route', () => {
     const group = Route.group([
       Route.get('/login', 'AuthController.login'),
       Route.post('/confirm', 'AuthController.confirm'),
-      Route.patch('/logoutAll', 'AuthController.logoutAll'),
+      Route.patch('/logoutAll', 'AuthController.logoutAllOtherSessions'),
       Route.put('/register', 'AuthController.register'),
       Route.delete('/forgot', 'AuthController.forgot'),
       Route.route('/validateConfirmationToken', ['POST', 'HEAD', 'PUT'], 'AuthController.validateConfirmationToken'),
@@ -45,7 +45,7 @@ describe('Route', () => {
           'validator': {},
         },
         {
-          'handler': 'AuthController.logoutAll',
+          'handler': 'AuthController.logoutAllOtherSessions',
           'methods': ['PATCH'],
           'middleware': ['Auth'],
           'pattern': '/api/v1/logoutAll',
@@ -105,7 +105,8 @@ describe('Route', () => {
           'methods': ['GET','HEAD'],
           'middleware': ['Auth'],
           'validator': {},
-        },{
+        },
+        {
           'pattern': '/test/:id',
           'handler': 'AuthController.update',
           'methods': ['PUT','PATCH'],

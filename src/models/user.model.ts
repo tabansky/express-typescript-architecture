@@ -1,6 +1,8 @@
 import { UserTypes } from '@constants';
 import { Model } from '@core/abstract/abstract.model';
 
+export const userCredentialAttributes = [ 'id', 'email', 'roleId', 'state', 'type' ] as const;
+
 export class User extends Model {
   public id!: number;
 
@@ -14,7 +16,7 @@ export class User extends Model {
 
   public type!: UserTypes;
 
-  public roleId!: string;
+  public roleId!: number;
 
   public createdAt!: string;
 

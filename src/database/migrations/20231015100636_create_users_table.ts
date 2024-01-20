@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 const table = 'users';
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTableIfNotExists(table, (schema) => {
+  await knex.schema.createTable(table, (schema) => {
     schema.increments('id');
 
     schema.string('name');
@@ -14,7 +14,9 @@ export async function up(knex: Knex): Promise<void> {
     schema.integer('role_id').unsigned().notNullable();
 
     schema.foreign('role_id').references('id').inTable('roles');
-    schema.timestamps();
+
+    schema.timestamp('created_at').defaultTo(knex.fn.now());
+    schema.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
   });
 }
 

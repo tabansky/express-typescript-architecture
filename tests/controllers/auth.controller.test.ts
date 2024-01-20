@@ -18,27 +18,14 @@ describe('Auth controller', () => {
     server.close(done);
   });
 
-  test('Body validation error', async () => {
+  test('User not found', async () => {
     try {
       await axios.post('http://localhost:8080/api/login', {});
     } catch (err) {
       const { response: { data: { status, message, details } } } = err;
 
-      expect(status).toEqual(400);
-      expect(message).toEqual('Request validation error');
-      expect(details).toEqual({
-        errors: [
-          {
-            message: '"email" is required',
-            path: ['email'],
-            type: 'any.required',
-            context: {
-              key: 'email',
-              label: 'email',
-            },
-          },
-        ],
-      });
+      expect(status).toEqual(404);
+      expect(message).toEqual('Not found');
     }
   });
 

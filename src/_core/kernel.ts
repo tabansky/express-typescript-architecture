@@ -5,7 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import { logger } from 'tools/logger';
+import { logger } from 'src/tools/logger';
 
 import { Provider } from './abstract/abstract.provider';
 import { Application } from './declarations';

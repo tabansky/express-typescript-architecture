@@ -1,16 +1,16 @@
 import Joi from 'joi';
 
+import { ConfirmationTokenActions } from '../../constants/enums/confirmation-tokens.enum';
+
 export const confirmationSchema = Joi.object({
   email: Joi.string().email().required(),
   token: Joi.string().required(),
+  action: Joi.string().valid(...Object.values(ConfirmationTokenActions)).required(),
 }).meta({ className: 'ConfirmationQueryParams' });
 
 export const forgotSchema = Joi.object({
-  type: Joi.string().valid('password').required(),
-  value: Joi.alternatives().try(
-    Joi.string().email().required(),
-  ),
-}).meta({ className: 'AuthForgotBodyParams' });
+  email: Joi.string().email().required(),
+}).meta({ className: 'AuthForgotPasswordBodyParams' });
 
 export const loginSchema = Joi.object({
   email: Joi.string().email().required(),

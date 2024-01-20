@@ -1,7 +1,7 @@
 import { Provider } from '@core/abstract/abstract.provider';
 import { Application } from '@core/declarations';
 import { Controllers } from '@types';
-import { AuthController } from 'controllers/auth.controller';
+import { AuthController } from 'src/controllers/auth.controller';
 
 const key = 'controllers';
 

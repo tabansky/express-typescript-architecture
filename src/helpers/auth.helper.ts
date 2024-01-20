@@ -6,6 +6,10 @@ export const generateBearerToken = (): string => {
   return crypto.randomBytes(255).toString('base64');
 };
 
+export const generateConfirmationToken = (): string => {
+  return crypto.randomBytes(48).toString('base64');
+};
+
 export const getTokenValidityHours = (remember: boolean): number => {
   if (remember) {
     return getHoursInMs(72);

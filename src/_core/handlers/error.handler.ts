@@ -1,16 +1,17 @@
-import { HttpStatusCodes } from '@core/constants';
 import { NextFunction, Request, Response } from 'express';
+import { logger } from 'src/tools/logger';
 
 import { HttpException } from './http-exception';
+import { HttpStatusCodes } from '../constants/index';
 
 export const GlobalErrorHandler = (error: HttpException, req: Request, res: Response, _next: NextFunction) => {
-  try {
-    const status = error.status || HttpStatusCodes.INTERNAL_SERVER_ERROR;
-    const message = error.message || 'Internal Server Error';
-    const details = error.details || {};
-
-    res.status(status).json({ status, message, details });
-  } catch (error) {
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ status: 500 });
+  if (error instanceof HttpException) {
+    return res.status(error.status).json({ status: error.status, message: error.message, details: error.details });
   }
+
+  const err = error as Error;
+  logger.error(`${err.message}\n${err.stack}`);
+
+  res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+    .json({ status: HttpStatusCodes.INTERNAL_SERVER_ERROR, message: 'Internal Server Error', details: err.stack });
 };

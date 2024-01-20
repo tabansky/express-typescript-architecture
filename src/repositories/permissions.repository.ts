@@ -1,6 +1,6 @@
 import { Repository } from '@core/abstract/abstract.repository';
 import { Knex } from 'knex';
-import { logger } from 'tools/logger';
+import { logger } from 'src/tools/logger';
 
 export class Permissions extends Repository {
   protected tableName = 'permissions';

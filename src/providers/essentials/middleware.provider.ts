@@ -2,8 +2,8 @@ import { Provider } from '@core/abstract/abstract.provider';
 import { Application } from '@core/declarations';
 import { MiddlewareHandler } from '@core/types';
 import { Middlewares } from '@types';
-import { NotFoundMiddleware } from 'middlewares/global/not-found.middleware';
-import { AuthMiddleware } from 'middlewares/serve/auth.middleware';
+import { NotFoundMiddleware } from 'src/middlewares/global/not-found.middleware';
+import { AuthMiddleware } from 'src/middlewares/serve/auth.middleware';
 
 const key = 'middlewares';
 
@@ -18,7 +18,7 @@ export class MiddlewareProvider extends Provider {
     this.provideGlobalMiddlewares(app);
 
     const middlewares: Middlewares = {
-      Auth: AuthMiddleware,
+      Auth: AuthMiddleware(app),
     };
 
     app.set(key, middlewares);

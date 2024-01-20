@@ -2,7 +2,9 @@ import type { Knex } from 'knex';
 
 import { databaseConfig } from './src/config';
 
-const config: { [key: string]: Knex.Config } = {
+type Config = Record<'development' | 'staging' | 'production', Knex.Config>;
+
+const config: Partial<Config> = {
   development: {
     ...databaseConfig,
     migrations: {
