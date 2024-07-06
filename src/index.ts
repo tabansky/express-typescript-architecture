@@ -8,5 +8,5 @@ process.on('unhandledRejection', (reason: Error, promise) => {
   logger.error(`Unhandled Rejection at: Promise ${JSON.stringify(promise)}\n Reason: ${reason}`);
 });
 
-server.on('listening', () => logger.info(`Application started on http://${app.get('host')}:${port}`));
+server.on('listening', () => console.info(`Application started on http://${app.get('host')}:${port}`));
 

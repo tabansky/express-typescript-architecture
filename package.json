@@ -36,6 +36,7 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.9.9",
     "openapi3-ts": "^4.2.1",
+    "stacktracey": "^2.1.8",
     "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.2",
     "winston": "^3.11.0",

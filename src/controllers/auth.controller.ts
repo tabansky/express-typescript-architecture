@@ -1,8 +1,9 @@
-import { Controller } from '@core/abstract/abstract.controller';
+import { Controller } from '@core/abstract/controller';
 import { HttpStatusCodes } from '@core/constants';
 import { Application } from '@core/declarations';
 import { Request } from '@core/types';
 import { AuthForgotPasswordBodyParams, ConfirmationQueryParams, LoginBodyParams, RegisterBodyParams } from '@types';
+import { log } from 'console';
 import { Response } from 'express';
 import { ClientRedirects } from 'src/constants/enums/client-redirects.enum';
 import { ConfirmationTokenActions } from 'src/constants/enums/confirmation-tokens.enum';

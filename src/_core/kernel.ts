@@ -5,11 +5,10 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import { logger } from 'src/tools/logger';
 
-import { Provider } from './abstract/abstract.provider';
+import { Provider } from './abstract/provider';
 import { Application } from './declarations';
-import { GlobalErrorHandler } from './handlers/error.handler';
+import { GlobalErrorHandler } from './utils/error.handler';
 
 export class Kernel {
   private app: Application;
@@ -20,9 +19,9 @@ export class Kernel {
   }
 
   public provide(providers: typeof Provider[]): this {
-    logger.info('Boot providers...');
+    console.info('Boot providers...');
     this.showExecutingTime(providers);
-    logger.info('Providers booted successfully!');
+    console.info('Providers booted successfully!');
 
     return this;
   };
@@ -36,7 +35,7 @@ export class Kernel {
       const end = Date.now();
       const ms = end - start;
 
-      logger.info(`Provider ${provider.name} booted in ${ms}ms`);
+      console.info(`Provider ${provider.name} booted in ${ms}ms`);
     }
   }
 

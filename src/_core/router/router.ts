@@ -1,23 +1,20 @@
-import { GlobalErrorHandler } from '@core/handlers/error.handler';
-import { HttpException } from '@core/handlers/http-exception';
-import { Controllers } from '@types';
-import { NextFunction, Request, Response } from 'express';
-import { ValidationError } from 'joi';
-import { logger } from 'src/tools/logger';
+import { Controllers, MiddlewareHandler, Request, RouteDefinition, RouterComponents } from '@core/types';
+import { NextFunction, Response } from 'express';
 
-import { toRoutesJSON } from './helper';
-import { HttpStatusCodes } from '../constants';
+import { RouteComponent } from './components/route.component';
+import { checkAvailableMethodMiddleware, toRoutesJSON, validateAndPipeRequest } from './helper';
 import { Application } from '../declarations';
-import { HttpValidator, RouteDefinition, RouterComponents } from '../types';
 
-export class Router {
-  constructor(private app: Application, private components: RouterComponents[], private globalPrefix = '') {}
+export class Router<T extends keyof Controllers> {
+  constructor(private app: Application, private components: RouterComponents<T>[], private globalPrefix = '') {}
 
-  public commit(): RouteDefinition[] {
+  public commit(): RouteDefinition<T>[] {
+    return this.prepareRoutes(toRoutesJSON(this.components));
+  }
+
+  private prepareRoutes(routes: RouteComponent<T>[]): RouteDefinition<T>[] {
     const handlers: string[] = [];
-    const routeDefinitions: RouteDefinition[] = [];
-
-    const routes = toRoutesJSON(this.components);
+    const routeDefinitions: RouteDefinition<T>[] = [];
 
     routes.forEach(route => {
       const handler = route.getHandler();
@@ -39,81 +36,44 @@ export class Router {
     return routeDefinitions;
   }
 
-  private validateAndPipeRequest(validator: HttpValidator = {}) {
-    function catchError(error?: ValidationError) {
-      if (!error) {
-        return;
-      }
-
-      throw new HttpException(HttpStatusCodes.BAD_REQUEST, 'Request validation error', { errors: error.details });
-    }
-
-    return function (req: Request, res: Response, next: NextFunction): void {
-      if (!Object.keys(validator).length) {
-        return;
-      }
-
-      const { routeSchema, querySchema, bodySchema } = validator;
-
-      if (routeSchema) {
-        const { error, value } = routeSchema.validate(req.params);
-
-        catchError(error);
-        req.params = value;
-      }
-
-      if (querySchema) {
-        const { error, value } = querySchema.validate(req.query);
-
-        catchError(error);
-        req.query = value;
-      }
-
-      if (bodySchema) {
-        const { error, value } = bodySchema.validate(req.body);
-
-        catchError(error);
-        req.body = value;
-      }
-    };
-  }
-
-  private isMethodAllowed(methods: string[], method: string): boolean {
-    return methods.includes(method);
-  };
-
-  private register(route: RouteDefinition): void {
+  private register(route: RouteDefinition<T>): void {
     const controllers = this.app.get('controllers');
-    const middlewares = this.app.get('middlewares');
 
     const [className, method] = route.handler.split('.') as [keyof Controllers, keyof Controllers[keyof Controllers]];
 
     const controller = controllers[className];
-    const handler = controller[method];
-    const middleware = route.middleware.map(ml => middlewares[ml]);
+    const handler = controller[method] as Function;
 
     if (typeof handler !== 'function') {
-      logger.error(`handler ${className}.${method as string} must be a function`);
-      throw new Error('handler must be a function');
+      throw new Error('handler ${className}.${method as string} must be a function');
     }
 
-    // todo move to method apart
-    const handlerWithCatcher = async (req: Request, res: Response, next: NextFunction) => {
-      if (!this.isMethodAllowed(route.methods, req.method)) {
-        return next();
-      }
-
-      try {
-        middleware.forEach((ml) => ml(req, res, next));
-        this.validateAndPipeRequest(route.validator)(req, res, next);
-
-        await handler.call(controller, req, res);
-      } catch (err) { // todo validate how it can be made better
-        GlobalErrorHandler(err, req, res, next);
-      }
+    const handlerMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+      return await handler.call(controller, req, res);
     };
 
-    // todo add tracker for user actions
-    this.app.use(route.pattern, handlerWithCatcher);
+    this.app.use(route.pattern, ...this.generateHandlerMiddlewares(route, handlerMiddleware));
+  }
+
+  private generateHandlerMiddlewares(route: RouteDefinition<T>, handler: MiddlewareHandler): MiddlewareHandler[] {
+    const middlewares = this.app.get('middlewares');
+    const response: MiddlewareHandler[] = [];
+
+    response.push(checkAvailableMethodMiddleware(route));
+    response.push(...route.middleware.map(ml => this.middlewareWrapper(middlewares[ml])));
+    response.push(this.middlewareWrapper(validateAndPipeRequest(route.validator)));
+    response.push(this.middlewareWrapper(handler));
+
+    return response;
+  }
+
+  private middlewareWrapper(middleware: MiddlewareHandler): MiddlewareHandler {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await middleware(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    };
   }
 }

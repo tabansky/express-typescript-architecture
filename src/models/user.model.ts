@@ -1,5 +1,5 @@
 import { UserTypes } from '@constants';
-import { Model } from '@core/abstract/abstract.model';
+import { Model } from '@core/abstract/model';
 
 export const userCredentialAttributes = [ 'id', 'email', 'roleId', 'state', 'type' ] as const;
 

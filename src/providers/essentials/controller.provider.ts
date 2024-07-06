@@ -1,4 +1,4 @@
-import { Provider } from '@core/abstract/abstract.provider';
+import { Provider } from '@core/abstract/provider';
 import { Application } from '@core/declarations';
 import { Controllers } from '@types';
 import { AuthController } from 'src/controllers/auth.controller';

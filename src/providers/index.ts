@@ -1,4 +1,4 @@
-import { Provider } from '@core/abstract/abstract.provider';
+import { Provider } from '@core/abstract/provider';
 
 import { ControllerProvider } from './essentials/controller.provider';
 import { DatabaseProvider } from './essentials/database.provider';

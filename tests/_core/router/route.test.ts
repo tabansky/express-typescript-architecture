@@ -19,7 +19,7 @@ describe('Route', () => {
   });
 
   test('Route group', async () => {
-    const group = Route.group([
+    const group = Route.build([
       Route.get('/login', 'AuthController.login'),
       Route.post('/confirm', 'AuthController.confirm'),
       Route.patch('/logoutAll', 'AuthController.logoutAllOtherSessions'),

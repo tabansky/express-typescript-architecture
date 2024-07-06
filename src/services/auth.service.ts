@@ -1,7 +1,7 @@
 import { UserStates } from '@constants';
-import { Service } from '@core/abstract/abstract.service';
+import { Service } from '@core/abstract/service';
 import { HttpStatusCodes } from '@core/constants';
-import { HttpException } from '@core/handlers/http-exception';
+import { HttpException } from '@core/utils/http-exception';
 import { LoginCredentials } from '@types';
 import { compare, hash } from 'bcrypt';
 import { MailSender } from 'src/components/mail-sender';

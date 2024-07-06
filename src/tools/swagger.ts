@@ -1,5 +1,5 @@
 import { Application } from '@core/declarations';
-import { RouteDefinition } from '@core/types';
+import { Controllers, RouteDefinition } from '@core/types';
 import { AnySchema } from 'joi';
 import j2s from 'joi-to-swagger';
 import { oas30 } from 'openapi3-ts';
@@ -25,7 +25,7 @@ export class SwaggerBuilder extends oas30.OpenApiBuilder {
     this.addRoutes(app.get('routes'));
   }
 
-  private addRoutes(routes: RouteDefinition[]) {
+  private addRoutes<T extends keyof Controllers>(routes: RouteDefinition<T>[]) {
     routes.forEach((route) => {
       route.methods.forEach((method) => {
         const lowerCaseMethod = method.toLowerCase();
