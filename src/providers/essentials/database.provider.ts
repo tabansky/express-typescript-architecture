@@ -1,5 +1,5 @@
 import { databaseConfig } from '@config';
-import { Provider } from '@core/abstract/abstract.provider';
+import { Provider } from '@core/abstract/provider';
 import { Application } from '@core/declarations';
 import knex, { Knex } from 'knex';
 

@@ -1,6 +1,7 @@
 import { Application } from '@core/declarations';
 import { MiddlewareHandler } from '@core/types';
-import { NextFunction, Request, Response } from 'express';
+import { Request } from '@core/types';
+import { NextFunction, Response } from 'express';
 
 export const AuthMiddleware = (app: Application): MiddlewareHandler => {
   return function (req: Request, res: Response, next: NextFunction): void {

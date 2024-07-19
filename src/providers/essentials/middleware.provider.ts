@@ -1,4 +1,4 @@
-import { Provider } from '@core/abstract/abstract.provider';
+import { Provider } from '@core/abstract/provider';
 import { Application } from '@core/declarations';
 import { MiddlewareHandler } from '@core/types';
 import { Middlewares } from '@types';

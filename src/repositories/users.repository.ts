@@ -1,4 +1,4 @@
-import { Repository } from '@core/abstract/abstract.repository';
+import { Repository } from '@core/abstract/repository';
 import { Knex } from 'knex';
 import { User } from 'src/models/user.model';
 

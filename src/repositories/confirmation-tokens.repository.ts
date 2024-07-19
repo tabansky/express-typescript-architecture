@@ -1,4 +1,4 @@
-import { Repository } from '@core/abstract/abstract.repository';
+import { Repository } from '@core/abstract/repository';
 import { Knex } from 'knex';
 import { ConfirmationTokenActions } from 'src/constants/enums/confirmation-tokens.enum';
 import { getHoursInMs } from 'src/helpers/time.helper';

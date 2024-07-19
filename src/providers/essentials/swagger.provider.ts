@@ -1,6 +1,5 @@
-import { Provider } from '@core/abstract/abstract.provider';
+import { Provider } from '@core/abstract/provider';
 import { Application } from '@core/declarations';
-import { logger } from 'src/tools/logger';
 import { SwaggerBuilder } from 'src/tools/swagger';
 import swaggerUi from 'swagger-ui-express';
 
@@ -14,7 +13,7 @@ export class SwaggerProvider extends Provider {
   private static setupConfig(app: Application) {
     const serverUrl = `http://${app.get('host')}:${app.get('port')}`;
 
-    logger.info(`swagger serverUrl: ${serverUrl}`);
+    console.info(`swagger serverUrl: ${serverUrl}`);
 
     return {
       app,

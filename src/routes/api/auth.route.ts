@@ -2,7 +2,7 @@
 import { Route } from '@core/router';
 import { loginSchema, registerSchema, confirmationSchema, forgotSchema } from 'src/validators/auth/auth.schemas';
 
-export default Route.group([
+export const AuthRoutes = Route.build([
   Route.post('/validate', 'AuthController.validateConfirmationToken').validator('bodySchema', confirmationSchema),
   Route.post('/register', 'AuthController.register').validator('bodySchema', registerSchema),
   Route.post('/login', 'AuthController.login').validator('bodySchema', loginSchema),

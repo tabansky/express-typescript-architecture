@@ -1,16 +1,16 @@
-import { HttpValidator, MiddlewareNames, RouteDefinition, RouteHandler } from '@core/types';
+import { Controllers, HttpValidator, MiddlewareNames, RouteDefinition, RouteHandler } from '@core/types';
 import { AnySchema } from 'joi';
 
-import { dropSlash } from '../helper';
+import { normalizeRoute } from '../helper';
 
-export class RouteMethod {
+export class RouteComponent<T extends keyof Controllers> {
   private prefixes: string[] = [];
 
   private routeMiddleware: MiddlewareNames[] = [];
 
   private validations: HttpValidator = {};
 
-  constructor(private pattern: string, private methods: string[], private handler: RouteHandler) {}
+  constructor(private pattern: string, private methods: string[], private handler: RouteHandler<T>) {}
 
   public prefix(prefix: string): this {
     this.prefixes.push(prefix);
@@ -22,7 +22,7 @@ export class RouteMethod {
     return this;
   }
 
-  public getHandler(): RouteHandler {
+  public getHandler(): RouteHandler<T> {
     return this.handler;
   }
 
@@ -38,7 +38,7 @@ export class RouteMethod {
     return this;
   }
 
-  public toJSON(): RouteDefinition {
+  public toJSON(): RouteDefinition<T> {
     return {
       pattern: this.computePattern(),
       handler: this.handler,
@@ -49,12 +49,13 @@ export class RouteMethod {
   }
 
   private computePattern(): string {
-    const pattern = dropSlash(this.pattern);
+    const pattern = normalizeRoute(this.pattern);
     const prefix = this.prefixes
       .slice()
       .reverse()
-      .map((one) => dropSlash(one))
+      .map((one) => normalizeRoute(one))
       .join('');
+
     return prefix ? `${prefix}${pattern === '/' ? '' : pattern}` : pattern;
   }
 }

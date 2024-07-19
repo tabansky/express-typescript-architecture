@@ -1,14 +1,11 @@
-import { ProvidedTypes } from '@core/declarations';
-import { RouteMethod } from '@core/router';
-import { MiddlewareNames, ResourceRouteNames, RouteHandler } from '@core/types';
+import { Controllers, MiddlewareNames, ResourceMiddleware, ResourceRouteNames, RouteHandler } from '@core/types';
 
-type ResourceMiddleware = { [R in ResourceRouteNames]?: MiddlewareNames | MiddlewareNames[] }
-& { '*'?: MiddlewareNames | MiddlewareNames[] };
+import { RouteComponent } from './route.component';
 
-export class RouteResource {
-  public routes: RouteMethod[] = [];
+export class ResourceComponent<T extends keyof Controllers> {
+  public routes: RouteComponent<T>[] = [];
 
-  constructor(private resource: string, private controller: keyof ProvidedTypes['controllers']) {
+  constructor(private resource: string, private controller: keyof Controllers) {
     this.buildRoutes();
   }
 
@@ -39,13 +36,13 @@ export class RouteResource {
     return this;
   }
 
-  private makeRoute(pattern: string, methods: string[], action: ResourceRouteNames) {
-    const route = new RouteMethod(pattern, methods, `${this.controller}.${action as keyof RouteHandler[keyof RouteHandler]}`);
+  private makeRoute(pattern: string, methods: string[], action: ResourceRouteNames): void {
+    const route = new RouteComponent(pattern, methods, `${this.controller}.${action}` as RouteHandler<T>);
 
     this.routes.push(route);
   }
 
-  private buildRoutes() {
+  private buildRoutes(): void {
     this.resource = this.resource.replace(/^\//, '').replace(/\/$/, '');
 
     this.makeRoute(this.resource, ['GET', 'HEAD'], 'index');
@@ -55,7 +52,7 @@ export class RouteResource {
     this.makeRoute(`${this.resource}/:id`, ['DELETE'], 'destroy');
   }
 
-  private filter(names: ResourceRouteNames[], inverse: boolean) {
+  private filter(names: ResourceRouteNames[], inverse: boolean): RouteComponent<T>[] {
     return this.routes.filter((route) => {
       const match = names.find((name) => route.getHandler().endsWith(name));
       return inverse ? !match : match;
