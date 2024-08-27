@@ -1,10 +1,8 @@
-import { NextFunction, Request as ExpressRequest, Response } from 'express';
+import { NextFunction } from 'express';
 import Joi from 'joi';
 
-import { ProvidedTypes } from './declarations';
-import { GroupComponent } from './router/components/group.component';
-import { ResourceComponent } from './router/components/resource.component';
-import { RouteComponent } from './router/components/route.component';
+import { ProvidedTypes, Response, Request } from './declarations';
+import { GroupComponent, ResourceComponent, RouteComponent } from './router/components';
 
 export type Controllers = ProvidedTypes['controllers'];
 
@@ -32,7 +30,9 @@ export type RouteDefinition<T extends keyof Controllers = keyof Controllers> = {
 export type ResourceMiddleware = { [R in ResourceRouteNames]?: MiddlewareNames | MiddlewareNames[] }
 & { '*'?: MiddlewareNames | MiddlewareNames[] };
 
-type ReqGeneric = Partial<Record<'params' | 'query' | 'body', unknown>>;
-export type Request<T extends ReqGeneric = ReqGeneric> = ExpressRequest<T['params'], never, T['body'], T['query']> & {
-  endpoint: { pattern: string, handler: string }
-};
+export type ReqGeneric = Partial<Record<'params' | 'query' | 'body', unknown>>;
+// export type Request<T extends ReqGeneric = ReqGeneric> = ExpressRequest<T['params'], never, T['body'], T['query']> & {
+//   endpoint: { pattern: string, handler: string }
+//   user: DecodedToken;
+//   scope?: PermissionScopes;
+// };

@@ -2,7 +2,7 @@ import { Controllers, MiddlewareNames, ResourceMiddleware, ResourceRouteNames, R
 
 import { RouteComponent } from './route.component';
 
-export class ResourceComponent<T extends keyof Controllers> {
+export class ResourceComponent<T extends keyof Controllers> { // todo add validation builder
   public routes: RouteComponent<T>[] = [];
 
   constructor(private resource: string, private controller: keyof Controllers) {
@@ -37,7 +37,7 @@ export class ResourceComponent<T extends keyof Controllers> {
   }
 
   private makeRoute(pattern: string, methods: string[], action: ResourceRouteNames): void {
-    const route = new RouteComponent(pattern, methods, `${this.controller}.${action}` as RouteHandler<T>);
+    const route = new RouteComponent(pattern, methods, `${this.controller as string}.${action}` as RouteHandler<T>);
 
     this.routes.push(route);
   }
@@ -46,9 +46,9 @@ export class ResourceComponent<T extends keyof Controllers> {
     this.resource = this.resource.replace(/^\//, '').replace(/\/$/, '');
 
     this.makeRoute(this.resource, ['GET', 'HEAD'], 'index');
-    this.makeRoute(this.resource, ['POST'], 'store');
     this.makeRoute(`${this.resource}/:id`, ['GET', 'HEAD'], 'edit');
-    this.makeRoute(`${this.resource}/:id`, ['PUT', 'PATCH'], 'update');
+    this.makeRoute(this.resource, ['POST'], 'store');
+    this.makeRoute(`${this.resource}/:id`, ['PATCH'], 'update');
     this.makeRoute(`${this.resource}/:id`, ['DELETE'], 'destroy');
   }
 

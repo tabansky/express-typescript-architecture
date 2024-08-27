@@ -1,9 +1,9 @@
-import { Controllers, MiddlewareHandler, Request, RouteDefinition, RouterComponents } from '@core/types';
-import { NextFunction, Response } from 'express';
+import { Controllers, MiddlewareHandler, RouteDefinition, RouterComponents } from '@core/types';
+import { NextFunction } from 'express';
 
 import { RouteComponent } from './components/route.component';
-import { checkAvailableMethodMiddleware, toRoutesJSON, validateAndPipeRequest } from './helper';
-import { Application } from '../declarations';
+import { toRoutesJSON, validateAndPipeRequest } from './helper';
+import { Application, Request, Response } from '../declarations';
 
 export class Router<T extends keyof Controllers> {
   constructor(private app: Application, private components: RouterComponents<T>[], private globalPrefix = '') {}
@@ -45,21 +45,22 @@ export class Router<T extends keyof Controllers> {
     const handler = controller[method] as Function;
 
     if (typeof handler !== 'function') {
-      throw new Error('handler ${className}.${method as string} must be a function');
+      throw new Error(`handler ${className}.${method as string} must be a function`);
     }
 
     const handlerMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-      return await handler.call(controller, req, res);
+      return await handler.call(controller, req, res, next);
     };
 
-    this.app.use(route.pattern, ...this.generateHandlerMiddlewares(route, handlerMiddleware));
+    route.methods.forEach(method => {
+      this.app[method.toLowerCase()](route.pattern, ...this.generateHandlerMiddlewares(route, handlerMiddleware));
+    });
   }
 
   private generateHandlerMiddlewares(route: RouteDefinition<T>, handler: MiddlewareHandler): MiddlewareHandler[] {
     const middlewares = this.app.get('middlewares');
     const response: MiddlewareHandler[] = [];
 
-    response.push(checkAvailableMethodMiddleware(route));
     response.push(...route.middleware.map(ml => this.middlewareWrapper(middlewares[ml])));
     response.push(this.middlewareWrapper(validateAndPipeRequest(route.validator)));
     response.push(this.middlewareWrapper(handler));

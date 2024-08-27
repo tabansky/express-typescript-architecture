@@ -1,14 +1,11 @@
-import { Controllers, HttpValidator, RouterComponents, Request, RouteDefinition, MiddlewareHandler } from '@core/types';
-import { NextFunction, Response } from 'express';
+import { Request, Response } from '@core/declarations';
+import { Controllers, HttpValidator, RouterComponents, RouteDefinition, MiddlewareHandler } from '@core/types';
+import { NextFunction } from 'express';
 import { ValidationError } from 'joi';
 
 import { GroupComponent, ResourceComponent, RouteComponent } from './components';
 import { HttpStatusCodes } from '../constants';
 import { HttpException } from '../utils/http-exception';
-
-export function isMethodAllowed(methods: string[], method: string): boolean {
-  return methods.includes(method);
-};
 
 export function normalizeRoute(input: string): string {
   if (input === '/') {
@@ -70,18 +67,6 @@ export function validateAndPipeRequest(validator: HttpValidator = {}) {
       catchValidationError(error);
       req.body = value;
     }
-
-    return next();
-  };
-}
-
-export function checkAvailableMethodMiddleware(route: RouteDefinition): MiddlewareHandler {
-  return function (req: Request, res: Response, next: NextFunction): void {
-    if (!isMethodAllowed(route.methods, req.method)) {
-      return next(new HttpException(HttpStatusCodes.METHOD_NOT_ALLOWED, 'Method not allowed'));
-    }
-
-    req.endpoint = { pattern: route.pattern, handler: route.handler };
 
     return next();
   };

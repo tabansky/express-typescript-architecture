@@ -1,10 +1,10 @@
-import { Request } from '@core/types';
-import { NextFunction, Response } from 'express';
+import { NextFunction } from 'express';
 import StackTracey from 'stacktracey';
 
 import { HttpException } from './http-exception';
 import { logger } from '../../tools/logger';
 import { HttpStatusCodes } from '../constants';
+import { Request, Response } from '../declarations';
 
 export const GlobalErrorHandler = (error: HttpException, req: Request, res: Response, _next: NextFunction) => {
   if (error instanceof HttpException) {

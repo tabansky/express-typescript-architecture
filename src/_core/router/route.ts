@@ -9,6 +9,9 @@ export class Route<T extends keyof Controllers> {
     return new GroupComponent<T>(routes);
   }
 
+  /**
+   * @deprecated not supports validation (not recommended)
+   */
   public static resource<T extends keyof Controllers>(
     resourcePattern: string,
     controller: keyof Controllers,
